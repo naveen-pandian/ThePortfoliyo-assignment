@@ -19,13 +19,13 @@ function App() {
       <Routes>
        
         <Route exact path='/' element={<HomeLight/>} />
-        <Route path='/home-light' element={<HomeLight/>}/>
-        <Route path='/home-dark' element={<HomeDark/>}/>
-        <Route path='/home-slider' element={<HomeSlider/>}/>
-        <Route path='/service-single' element={<ServiceSingle/>}/>
-        <Route path='/project-single' element={<ProjectSingle/>}/>
-        <Route path='/blog-single' element={<BlogSingle/>}/>
-        <Route path='*' element={<ErrorPage/>}/>
+        <Route exact path='/home-light' element={<HomeLight/>}/>
+        <Route exact path='/home-dark' element={<HomeDark/>}/>
+        <Route exact path='/home-slider' element={<HomeSlider/>}/>
+        <Route exact path='/service-single' element={<ServiceSingle/>}/>
+        <Route exact path='/project-single' element={<ProjectSingle/>}/>
+        <Route exact path='/blog-single' element={<BlogSingle/>}/>
+        <Route exact path='*' element={<ErrorPage/>}/>
       
       </Routes>
       </BrowserRouter>
