@@ -1,24 +1,37 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter,Routes,Route} from 'react-router-dom';
+import HomeLight from './Components/Home-Light';
+import HomeDark from './Components/Home-Dark';
+import HomeSlider from './Components/Home-Slider';
+import ProjectSingle from './Components/Project-Single';
+import ServiceSingle from './Components/Service-Single';
+import BlogSingle from './Components/Blog-Single';
+import ErrorPage from './Components/Error-Page';
+import React from 'react';
+
 
 function App() {
+      
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <BrowserRouter>
+ 
+      <Routes>
+       
+        <Route exact path='/' element={<HomeLight/>} />
+        <Route path='/home-light' element={<HomeLight/>}/>
+        <Route path='/home-dark' element={<HomeDark/>}/>
+        <Route path='/home-slider' element={<HomeSlider/>}/>
+        <Route path='/service-single' element={<ServiceSingle/>}/>
+        <Route path='/project-single' element={<ProjectSingle/>}/>
+        <Route path='/blog-single' element={<BlogSingle/>}/>
+        <Route path='*' element={<ErrorPage/>}/>
+      
+      </Routes>
+      </BrowserRouter>
+
+    </>
+ 
   );
 }
 
