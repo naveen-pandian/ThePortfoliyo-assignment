@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes,Route, HashRouter} from 'react-router-dom';
+import { Routes,Route, BrowserRouter} from 'react-router-dom';
 import HomeLight from './Components/Home-Light';
 import HomeDark from './Components/Home-Dark';
 import HomeSlider from './Components/Home-Slider';
@@ -14,7 +14,7 @@ function App() {
       
   return (
     <>
-      <HashRouter basename='/ThePortfoliyo-assignment'>
+      <BrowserRouter basename='/ThePortfoliyo-assignment'>
  
       <Routes>
        
@@ -28,7 +28,7 @@ function App() {
         <Route  path='*' element={<ErrorPage/>}/>
       
       </Routes>
-      </HashRouter>
+      </BrowserRouter>
 
     </>
  
