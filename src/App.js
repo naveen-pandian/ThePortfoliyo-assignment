@@ -7,15 +7,20 @@ import ProjectSingle from './Components/Project-Single';
 import ServiceSingle from './Components/Service-Single';
 import BlogSingle from './Components/Blog-Single';
 import ErrorPage from './Components/Error-Page';
-import React from 'react';
+import React,{useContext} from 'react';
+import { ContextApi } from './Api/ContextApi';
+
+
 
 
 function App() {
-      
+
   return (
     <>
+
+   
       <BrowserRouter basename='/ThePortfoliyo-assignment'>
- 
+  
       <Routes>
        
         <Route exact path='/' element={<HomeLight/>} />
@@ -29,7 +34,7 @@ function App() {
       
       </Routes>
       </BrowserRouter>
-
+    
     </>
  
   );

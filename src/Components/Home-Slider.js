@@ -1,58 +1,10 @@
-import React from "react";
-import { useState,useEffect } from "react";
+import React, { useContext } from "react";
 import { Link } from 'react-router-dom';
+import { ContextApi } from "../Api/ContextApi";
 
 function HomeSlider(){
 
-    const [usser,setUsser]=useState(
-        {
-            "email":""
-        }
-    );
-
-    const [aboout,setAboout]=useState(
-        {
-            "name": "",
-            "title": "",
-            "subTitle": "",
-            "description": "",
-            "quote": "",
-            "exp_year": "",
-            "address": "",
-            "some_total": "",
-            "phoneNumber": "",
-            "avatar": {
-                "public_id": "",
-                "url": "",
-                "_id": ""
-            }
-    });
-
-    const [servicess,setServicess]=useState([]);
-    const [proojects,setProojects]=useState([]);
-    const [tesst,setTesst]=useState([]);
-    const [sociial,setSociial]=useState([]);
-
-  
-
-    const [eduucation,setEduucation]=useState([]);
-    useEffect(()=>{
-      fetch('https://portfolio-backend-30mp.onrender.com/api/v1/get/user/65b3a22c01d900e96c4219ae')
-      .then(response => response.json())
-      .then(response => {
-        console.log('Response: ',response);
-        setAboout(response.user.about);
-        setUsser(response.user);
-        setServicess(response.user.services);
-        setProojects(response.user.projects);
-        setTesst(response.user.testimonials);
-        setEduucation(response.user.timeline);
-        setSociial(response.user.social_handles);
-      })
-     },[]);
-    
-
-
+    const {userData} = useContext (ContextApi);
 
     return(
         <>
@@ -111,19 +63,19 @@ function HomeSlider(){
                                 <li>
                                     <div className="content">
                                         <p>Address</p> 
-                                        <strong>{aboout.address}</strong>
+                                        <strong>{userData.about?.address}</strong>
                                     </div>
                                 </li>
                                 <li>
                                     <div className="content">
                                         <p>Email</p> 
-                                        <strong>{usser.email}</strong>
+                                        <strong>{userData.email}</strong>
                                     </div>
                                 </li>
                                 <li>
                                     <div className="content">
                                         <p>Contact</p> 
-                                        <strong>{aboout.phoneNumber}</strong>
+                                        <strong>{userData.about?.phoneNumber}</strong>
                                     </div>
                                 </li>
                             </ul>
@@ -144,7 +96,7 @@ function HomeSlider(){
                     </div>
                     <div className="widget social">
                         <ul className="link">
-                             {sociial.map((item,index)=>(
+                             {userData.social_handles?.map((item,index)=>(
                         <li key={index} >
                             <a href={`${item.url}`}>
                               <img className="sociialicon" src={`${item.image.url}`}/>
@@ -180,16 +132,16 @@ function HomeSlider(){
                         <div className="content">
                             <div className="row align-center">
                                 <div className="col-lg-6 info">
-                                    <h2><span>Hello <img src="assets/img/shape/4.png" alt="Icon"/></span>     <br/> I'm {aboout.name}</h2>
+                                    <h2><span>Hello <img src="assets/img/shape/4.png" alt="Icon"/></span>     <br/> I'm {userData.about?.name}</h2>
                                     <h3 className="title">
                                         <span className="header-caption" id="page-top">
                                                 
                                             <span className="cd-headline clip is-full-width">
                                                     
                                                 <span className="cd-words-wrapper">
-                                                    <b className="is-visible">{aboout.title}</b>
-                                                    <b className="is-hidden">{aboout.subTitle.substring(0,20)}</b>
-                                                    <b className="is-hidden">{aboout.subTitle.substring(22,)}</b>
+                                                    <b className="is-visible">{userData.about?.title}</b>
+                                                    <b className="is-hidden">{userData.about?.subTitle.substring(0,20)}</b>
+                                                    <b className="is-hidden">{userData.about?.subTitle.substring(22,)}</b>
                                                 </span>
                                             </span>
                                                 
@@ -201,7 +153,7 @@ function HomeSlider(){
                                 </div>
 
                                 <div className="col-lg-6 thumb">
-                                    <img className="illusslide" src={`${aboout.avatar.url}`}  alt="Thumb"/>
+                                    <img className="illusslide" src={`${userData.about?.avatar?.url}`}  alt="Thumb"/>
                                     <div className="shape-center">
                                         <img src="assets/img/shape/7.png" alt="Thumb"/>
                                     </div>
@@ -224,7 +176,7 @@ function HomeSlider(){
 
                                 <div className="col-lg-10 offset-lg-1">
                                     <div className="row">
-                                    {servicess.map( (item) => (  
+                                    {userData.services?.map( (item) => (  
                                         <div key={item._id} className="service-style-one col-lg-4 col-md-6">
                                             <div className="service-style-one-item">
                                                 <img src={`${item.image.url}`} alt="Icon"/>
@@ -257,7 +209,7 @@ function HomeSlider(){
 
                                 <div className="col-lg-10 offset-lg-1 thumb">
                                     <div id="portfolio-grid" className="gallery-items colums-3">
-                                            {proojects.map((items,index) => (
+                                            {userData.projects?.map((items,index) => (
                                         <div key={index} className="pf-item">
                                             <div className="overlay-content">
                                                 <img src={`${items.image.url}`} alt="thumb"/>
@@ -297,7 +249,7 @@ function HomeSlider(){
 
                                 <div className="col-lg-10 offset-lg-1 thumb">
                                     <ul className="education-table">
-                                    {eduucation.map( (item,index) => (
+                                    {userData.timeline?.map( (item,index) => (
                                                   <li key={index}>
                                             <h4> {item.jobTitle}</h4>
                                             <h5> {item.company_name} <br/> {item.jobLocation}</h5>
@@ -328,22 +280,22 @@ function HomeSlider(){
                                 <div className="col-lg-10 offset-lg-1">
                                     <div className="row">
                                             
-                                        {tesst.map( ( item,index) => ( 
+                                        {userData.projects?.map( ( item,index) => ( 
                                         <div key={index} className="blog-style-one mb-30 col-lg-4 col-md-6">
                                             <div className="item">
                                                 <div className="thumb">
-                                                <Link to='/blog-single' state={{itemss: item }}><img src={`${item.image.url}`} alt="Thumb"/></Link>
+                                                <Link to='/blog-single' state={{item : item }}><img src={`${item.image.url}`} alt="Thumb"/></Link>
                                             
                                                 </div>
                                                 <div className="info">
                                                     <h4>
-                                                        <Link to='/blog-single' state={{itemss: item }}>{item.review.substring(0,43)}....</Link>
+                                                        <Link to='/blog-single' state={{itemss: item }}>{item.description.substring(0,43)}....</Link>
                                                 
                                                     </h4>
                                                     <div className="meta">
                                                         <ul>
                                                             <li>
-                                                                <a href="#"><i className="fas fa-user-circle"></i> {item.name}</a>
+                                                                <a href="#"><i className="fas fa-user-circle"></i> {userData.about?.name}</a>
                                                             </li>
                                                             <li>
                                                                 <i className="fas fa-calendar-alt"></i> 15 Auguest, 2023
@@ -381,7 +333,7 @@ function HomeSlider(){
                                     <div className="form-box mt-50">
                                         <h2>Let's talk?</h2>
                                         <p>
-                                            {aboout.quote}
+                                            {userData.about?.quote}
                                         </p>
                                         <form action="assets/mail/contact.php" method="POST" className="contact-form">
                                             <div className="row">
@@ -438,7 +390,7 @@ function HomeSlider(){
                                                 <div className="info">
                                                     <p>Our Email</p>
                                                     <h5>
-                                                    <a href={`mailto:${usser.email}`}>{usser.email}</a> 
+                                                    <a href={`mailto:${userData.email}`}>{userData.email}</a> 
                                                         
                                                     </h5>
                                                 </div>
@@ -450,7 +402,7 @@ function HomeSlider(){
                                                 <div className="info">
                                                     <p>Address</p>
                                                     <h5>
-                                                       {aboout.address}
+                                                       {userData.about?.address}
                                                     </h5>
                                                 </div>
                                             </li>
@@ -461,7 +413,7 @@ function HomeSlider(){
                                                 <div className="info">
                                                     <p>Phone</p>
                                                     <h5>
-                                                    <a href={`tel:${aboout.phoneNumber}`}>{aboout.phoneNumber}</a>
+                                                    <a href={`tel:${userData.about?.phoneNumber}`}>{userData.about?.phoneNumber}</a>
                                                     </h5>
                                                 </div>
                                             </li>

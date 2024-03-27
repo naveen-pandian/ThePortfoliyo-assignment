@@ -1,68 +1,25 @@
-import React,{useState,useEffect} from "react";
+import React,{useState,useContext} from "react";
 import Header from "./header";
 import Footer from "./footer";
 import { useLocation } from "react-router-dom";
+import { ContextApi } from "../Api/ContextApi";
 
 
 function ServiceSingle(){
-    const [aabout,setAabout]=useState(
-        {
-           "phoneNumber": ""
-            
-    });
-
-    const [ooneserv,setOoneserv]=useState(
-        {
-            "name": "",
-            "charge": "",
-            "desc": "",
-            "enabled":"",
-            "_id": "",
-            "image": {
-                "public_id": "",
-                "url": ""
-            }
-        }
-    )
-
-
-    const [ttwoserv,setTtwoserv]=useState(
-        {
-            "name": "",
-            "charge": "",
-            "desc": "",
-            "enabled":"",
-            "_id": "",
-            "image": {
-                "public_id": "",
-                "url": ""
-            }
-        }
-    )
+    
+    const {userData}= useContext(ContextApi);
 
     const location= useLocation();
-    console.log(location);
     const get=location.state?.item;
-    const [item,setItem]=useState(get);
-    useEffect(()=>{
-        fetch('https://portfolio-backend-30mp.onrender.com/api/v1/get/user/65b3a22c01d900e96c4219ae')
-      .then(response => response.json())
-      .then(response => { setOoneserv(response.user.services[1]);
-        setTtwoserv(response.user.services[5]);
-        setAabout(response.user.about);
-    });
-             setItem(get);
-            
-    },[]
-    )
-    console.log(item);
+    const [item]=useState(get);
+   
 
     return(
 
         <>
         <Header></Header>
          
-    <div  className="breadcrumb-area shadow dark bg-cover text-center text-light" style={{"backgroundImage": `url(${item.image.url})`}}>
+    <div  className="breadcrumb-area shadow dark bg-cover text-center text-light" style={{"backgroundImage": `url(${item.image?.url})`}}>
         <div  className="container">
             <div  className="row">
                 <div  className="col-lg-12 col-md-12">
@@ -85,12 +42,12 @@ function ServiceSingle(){
                     
                     <div  className="col-lg-8 services-single-content">
                         <div  className="thumb">
-                            <img src={`${item.image.url}`}alt="Thumb"/>
+                            <img src={`${item.image?.url}`}alt="Thumb"/>
                         </div>
-                        <h2>Best influencer marketing services</h2>
-                        <p>
-                            We denounce with righteous indige nation and dislike men who are so beguiled and demo realized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue cannot foresee. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled data structures manages data in technology.
-                        </p>
+                        <h2>{item.name}</h2>
+                       <p>
+                        {item.desc}
+                       </p>
                         <div  className="features mt-40 mt-xs-30 mb-30 mb-xs-20">
                             <div  className="row">
                                 <div  className="col-lg-4 col-md-6">
@@ -170,24 +127,18 @@ function ServiceSingle(){
                         <div  className="services-more mt-50">
                             <h3>Popular Services</h3>
                             <div  className="row">
-                                <div  className="col-md-6">
+                                {userData.services?.map((items,index) => (
+                                <div key={index} className="col-md-6">
                                     <div  className="item">
-                                    <img src={`${ooneserv.image.url}`}/>
-                                        <h4><a href="#">{ooneserv.name}</a></h4>
+                                    <img src={`${items.image.url}`}/>
+                                        <h4><a href="#">{items.name}</a></h4>
                                         <p>
-                                            {ooneserv.desc}<br/> Charge : {ooneserv.charge}
+                                            {items.desc}<br/> Charge : {items.charge}
                                         </p>
                                     </div>
                                 </div>
-                                <div  className="col-md-6">
-                                    <div  className="item">
-                                    <img src={`${ttwoserv.image.url}`}/>
-                                        <h4><a href="#">{ttwoserv.name}</a></h4>
-                                       <p>
-                                        {ttwoserv.desc}<br/> Charge : {ttwoserv.charge}
-                                       </p>
-                                    </div>
-                                </div>
+                                ))}
+                               
                             </div>
                         </div>
                     </div>
@@ -198,22 +149,21 @@ function ServiceSingle(){
                             <h4  className="widget-title">Services List</h4>
                             <div  className="content">
                                 <ul>
-                                    <li  className="current-item"><a href="#">App Integration</a></li>
-                                    <li><a href="#">Maxed Out Mobile Apps</a></li>
-                                    <li><a href="#">Cybill Technologies</a></li>
-                                    <li><a href="#">Hopper Technologies</a></li>
+                                    {userData.services?.map( (items,index) => (
+                                    <li key={index} className={index==0?"current-item":""}><a href="#">{ items.name}</a></li> ))}
+                                  
                                 </ul>
                             </div>
                         </div>
                          
-                        <div  className="single-widget quick-contact text-light" style={{"backgroundImage": `url(${item.image.url})`}}>
+                        <div  className="single-widget quick-contact text-light" style={{"backgroundImage": `url(${item.image?.url})`}}>
                             <div  className="content">
                                 <i  className="fas fa-phone"></i>
                                 <h4>Need any help?</h4>
                                 <p>
                                     We are here to help our customer any time. You can call on 24/7 To Answer Your Question.
                                 </p>
-                                <h2>{aabout.phoneNumber}</h2>
+                                <h2>{userData.about?.phoneNumber}</h2>
                             </div>
                         </div>
                          

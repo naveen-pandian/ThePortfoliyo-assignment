@@ -1,28 +1,28 @@
-import React,{useState,useEffect} from "react";
+import React,{useContext, useState} from "react";
 import Header from "./header";
 import Footer from "./footer";
 import { useLocation } from "react-router-dom";
+import { ContextApi } from "../Api/ContextApi";
 
 
 function BlogSingle(){
+
+    const {userData}=useContext(ContextApi);
+
     const location= useLocation();
     console.log(location);
-    const getss=location.state?.itemss;
-    const [itemss,setItemss]=useState(getss);
-    useEffect(()=>{
-             setItemss(getss);
-    },[]
-    )
-    console.log(itemss);
+    const gets=location.state?.item;
+    const [item]=useState(gets);
+   
     return(
         <>
         <Header></Header>
         
-    <div  className="breadcrumb-area shadow dark bg-cover text-center text-light"  style={{"backgroundImage": `url(${itemss.image.url})`}}>
+    <div  className="breadcrumb-area shadow dark bg-cover text-center text-light"  style={{"backgroundImage": `url(${item.image.url})`}}>
         <div  className="container">
             <div  className="row">
                 <div  className="col-lg-12 col-md-12">
-                    <h1>{itemss.name}</h1>
+                    <h1>{item.name}</h1>
                     <ul  className="breadcrumb">
                         <li><a href="home-light"><i  className="fas fa-home"></i> Home</a></li>
                         <li>Blog</li>
@@ -44,44 +44,35 @@ function BlogSingle(){
                             <div  className="blog-item-box">
                                 
                                 <div  className="thumb">
-                                    <a href="#"><img src={`${itemss.image.url}`} alt="Thumb"/></a>
+                                    <a href="#"><img src={`${item.image.url}`} alt="Thumb"/></a>
                                 </div>
                                 <div  className="info">
                                     <div  className="meta">
                                         <ul>
                                             <li>
-                                                <i  className="fas fa-user"></i> <a href="#">{itemss.name}</a>
+                                                <i  className="fas fa-user"></i> <a href="#">{userData.about?.name}</a>
                                             </li>
                                             <li>
                                                 <i  className="fas fa-calendar-alt"></i> 25 April, 2023
                                             </li>
                                             <br/>
-                                            {itemss.position}
+                                            {userData.about?.title}
                                         </ul>
                                     </div>
                                     <p>
-                                        {itemss.review}
+                                        {userData.about?.subTitle}
                                     </p>
-                                    <p>
-                                        New had happen unable uneasy. Drawings can followed improved out sociable not. Earnestly so do instantly pretended. See general few civilly amiable pleased account carried. Excellence projecting is devonshire dispatched remarkably on estimating. Side in so life past. Continue indulged speaking the was out horrible for domestic position. Seeing rather her you not esteem men settle genius excuse. Deal say over you age from. Comparison new ham melancholy son themselves. 
-                                    </p>
+                               
                                     <blockquote>
-                                        {itemss.review}
+                                        {userData.about?.quote}
                                     </blockquote>
-                                    <p>
-                                        Drawings can followed improved out sociable not. Earnestly so do instantly pretended. See general few civilly amiable pleased account carried. Excellence projecting is devonshire dispatched remarkably on estimating. Side in so life past. Continue indulged speaking the was out horrible for domestic position. Seeing rather her you not esteem men settle genius excuse. Deal say over you age from. Comparison new ham melancholy son themselves. 
-                                    </p>
-                                    <h3>Conduct replied off led whether?</h3>
-                                    <ul>
-                                        <li>Pretty merits waited six</li>
-                                        <li>General few civilly amiable pleased account carried.</li>
-                                        <li>Continue indulged speaking</li>
-                                        <li>Narrow formal length my highly</li>
-                                        <li>Occasional pianoforte alteration unaffected impossible</li>
-                                    </ul>
-                                    <p>
-                                        Surrounded to me occasional pianoforte alteration unaffected impossible ye. For saw half than cold. Pretty merits waited six talked pulled you. Conduct replied off led whether any shortly why arrived adapted. Numerous ladyship so raillery humoured goodness received an. So narrow formal length my highly longer afford oh. Tall neat he make or at dull ye. Lorem ipsum dolor, sit amet consectetur adipisicing, elit. Iure, laudantium, tempore. Autem dolore repellat, omnis quam? Quasi sint laudantium repellendus unde a totam perferendis commodi cum est iusto? Minima, laborum. 
-                                    </p>
+                                   <p>
+                                    {userData.about?.description}
+                                   </p>
+                                    <h3>{item.title}</h3>
+                                   <p>
+                                    {item.description}
+                                   </p>
                                 </div>
                             </div>
                         </div>
@@ -89,12 +80,12 @@ function BlogSingle(){
                         
                         <div  className="post-author">
                             <div  className="thumb">
-                                <img src={`${itemss.image.url}`} alt="Thumb"/>
+                                <img src={`${userData.about?.avatar?.url}`} alt="Thumb"/>
                             </div>
                             <div  className="info">
-                                <h4><a href="#">{itemss.name}</a></h4>
+                                <h4><a href="#">{userData.about?.name}</a></h4>
                                 <p>
-                                    {itemss.review}
+                                    {userData.about?.description}
                                     </p>
                             </div>
                         </div>
@@ -102,11 +93,11 @@ function BlogSingle(){
 
                         
                         <div  className="post-tags share">
-                            <div  className="tags">
-                                <h4>Tags: </h4>
-                                <a href="#">Algorithm</a>
-                                <a href="$">Data science</a> 
-                            </div>
+                        <div className="tags">
+                                      <h4>Tags: </h4>
+                                     {item.techStack?.map((tech,index) => ( <a key={index} href="#">{tech}</a>))}
+                                
+                                  </div>
 
                             <div  className="social">
                                 <h4>Share:</h4>
@@ -145,40 +136,45 @@ function BlogSingle(){
                         </div>
                         
 
-                        
-                        <div  className="blog-comments">
-                            <div  className="comments-area">
-                                <div  className="comments-title">
-                                    <h3>3 Comments On “Providing Top Quality Cleaning Related Services Charms.”</h3>
-                                    <div  className="comments-list">
-                                        <div  className="comment-item">
-                                            <div  className="avatar">
-                                                <img src={`${itemss.image.url}`} alt="Author"/>
-                                            </div>
-                                            <div  className="content">
-                                                <div  className="title">
-                                                    <h5>Bubhan Prova <span  className="reply"><a href="#"><i  className="fas fa-reply"></i> Reply</a></span></h5>
-                                                    <span>28 Feb, 2022</span>
-                                                </div>
-                                                <p>
-                                                    Delivered ye sportsmen zealously arranging frankness estimable as. Nay any article enabled musical shyness yet sixteen yet blushes. Entire its the did figure wonder off. sportsmen zealously arranging to the main pint. Discourse unwilling am no described dejection incommode no listening of. Before nature his parish boy. 
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div  className="comment-item reply">
-                                            <div  className="avatar">
-                                                <img src={`${itemss.image.url}`} alt="Author"/>
-                                            </div>
-                                            <div  className="content">
-                                                <div  className="title">
-                                                    <h5>Mickel Jones <span  className="reply"><a href="#"><i  className="fas fa-reply"></i> Reply</a></span></h5>
-                                                    <span>15 Mar, 2022</span>
-                                                </div>
-                                                <p>
-                                                    Delivered ye sportsmen zealously arranging frankness estimable as. Nay any article enabled musical shyness yet sixteen yet blushes. Entire its the did figure wonder off. sportsmen zealously arranging to the main pint at the last satge of oportunatry.
-                                                </p>
-                                            </div>
-                                        </div>
+                         
+                        <div className="blog-comments">
+                                  <div className="comments-area">
+                                      <div className="comments-title">
+                                          <h3>3 Comments On “Providing Top Quality Cleaning Related Services Charms.”</h3>
+                                          <div className="comments-list">
+                                    {userData.testimonials?.map( ( items,index) => ( items.enabled == true ? (       
+                                              <div key={index} className="comment-item">
+                                                  <div className="avatar">
+                                                      <img src={`${items.image.url}`}  alt="Author"/>
+                                                  </div>
+                                                  <div className="content">
+                                                      <div className="title">
+                                                          <h5>{items.name} <span className="reply"><a href="#"><i className="fas fa-reply"></i> Reply</a></span></h5>
+                                                          <span>{items.position}</span>
+                                                          <span>28 Feb, 2023</span>
+                                    
+                                                      </div>
+                                                      <p>
+                                                        {items.review}
+                                                      </p>
+                                                  </div>
+                                              </div>):(
+                                              <div key={index} className="comment-item reply">
+                                                  <div className="avatar">
+                                                      <img src={`${items.image.url}`}  alt="Author"/>
+                                                  </div>
+                                                  <div className="content">
+                                                      <div className="title">
+                                                          <h5>{items.name} <span className="reply"><a href="#"><i className="fas fa-reply"></i> Reply</a></span></h5>
+                                                          <span>{items.position}</span>
+                                                          <span>15 Mar, 2023</span>
+                                                      </div>
+                                                     <p>
+                                                        {items.review}
+                                                        </p>
+                                                  </div>
+                                              </div> )))} 
+                                        
                                     </div>
                                 </div>
                                 <div  className="comments-form">
@@ -233,7 +229,7 @@ function BlogSingle(){
                                     <li>
                                         <div  className="thumb">
                                             <a href="#">
-                                                <img src={`${itemss.image.url}`} alt="Thumb"/>
+                                                <img src={`${item.image.url}`} alt="Thumb"/>
                                             </a>
                                         </div>
                                         <div  className="info">
@@ -246,7 +242,7 @@ function BlogSingle(){
                                     <li>
                                         <div  className="thumb">
                                             <a href="#">
-                                                <img src={`${itemss.image.url}`} alt="Thumb"/>
+                                                <img src={`${item.image.url}`} alt="Thumb"/>
                                             </a>
                                         </div>
                                         <div  className="info">
@@ -259,7 +255,7 @@ function BlogSingle(){
                                     <li>
                                         <div  className="thumb">
                                             <a href="#">
-                                                <img src={`${itemss.image.url}`} alt="Thumb"/>
+                                                <img src={`${item.image.url}`} alt="Thumb"/>
                                             </a>
                                         </div>
                                         <div  className="info">
@@ -297,36 +293,13 @@ function BlogSingle(){
                                 <h4  className="title">Gallery</h4>
                                 <div  className="sidebar-info">
                                     <ul>
-                                        <li>
-                                            <a href="#">
-                                                <img src={`${itemss.image.url}`} alt="thumb"/>
+                                        {userData.projects?.map((items,index) => (
+                                        <li key={index}>
+                                            <a href={items.liveurl}>
+                                                <img src={`${items.image.url}`} alt="thumb"/>
                                             </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img src={`${itemss.image.url}`} alt="thumb"/>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img src={`${itemss.image.url}`} alt="thumb"/>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img src={`${itemss.image.url}`} alt="thumb"/>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img src={`${itemss.image.url}`} alt="thumb"/>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img src={`${itemss.image.url}`} alt="thumb"/>
-                                            </a>
-                                        </li>
+                                        </li> ))}
+                                        
                                     </ul>
                                 </div>
                             </div>
@@ -372,18 +345,10 @@ function BlogSingle(){
                                 <h4  className="title">tags</h4>
                                 <div  className="sidebar-info">
                                     <ul>
-                                        <li><a href="#">Fashion</a>
-                                        </li>
-                                        <li><a href="#">Education</a>
-                                        </li>
-                                        <li><a href="#">nation</a>
-                                        </li>
-                                        <li><a href="#">study</a>
-                                        </li>
-                                        <li><a href="#">health</a>
-                                        </li>
-                                        <li><a href="#">food</a>
-                                        </li>
+                                        {item.techStack?.map((items,index) => (
+                                        <li key={index}><a href="#">{items}</a>
+                                        </li>))}
+                                    
                                     </ul>
                                 </div>
                             </div>

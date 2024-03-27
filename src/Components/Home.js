@@ -1,99 +1,22 @@
-import React from "react";
-import { useState,useEffect } from "react";
+import React, { useState } from "react";
+import { useContext } from "react";
+import { ContextApi } from "../Api/ContextApi";
 
 function Home(props){
-    
-    const [user,setUser]=useState(
-        {
-            "email":""
-        }
-    );
 
-
-    const [about,setAbout]=useState(
-        {
-            "name": "",
-            "title": "",
-            "subTitle": "",
-            "description": "",
-            "quote": "",
-            "exp_year": "",
-            "address": "",
-            "some_total": "",
-            "phoneNumber": "",
-            "avatar": {
-                "public_id": "",
-                "url": "",
-                "_id": ""
-            }
-    });
-
-    const [services,setServices]=useState([]);
-    const [skills,setSkills]=useState([]); 
-    const [projects,setProjects]=useState([]);
-    const [test,setTest]=useState([]);
-    const [youtube,setYoutube]=useState(
-        {
-            "url": "",
-            "title": "",
-            "image": "",
-            "_id": ""
-        }
-    );
-
-    const [oneserv,setOneserv]=useState(
-        {
-            "name": "",
-            "charge": "",
-            "desc": "",
-            "enabled":"",
-            "_id": "",
-            "image": {
-                "public_id": "",
-                "url": ""
-            }
-        }
-    )
-
-
-    const [twoserv,setTwoserv]=useState(
-        {
-            "name": "",
-            "charge": "",
-            "desc": "",
-            "enabled":"",
-            "_id": "",
-            "image": {
-                "public_id": "",
-                "url": ""
-            }
-        }
-    )
-
-    const [education,setEducation]=useState([]);
-    const [soocial,setSoocial]=useState([]);
-
-    useEffect(()=>{
-      fetch('https://portfolio-backend-30mp.onrender.com/api/v1/get/user/65b3a22c01d900e96c4219ae')
-      .then(response => response.json())
-      .then(response => {
-        console.log('Response: ',response);
-        setAbout(response.user.about);
-        setUser(response.user);
-        setServices(response.user.services);
-        setSkills(response.user.skills);
-        setProjects(response.user.projects);
-        setTest(response.user.testimonials);
-        setOneserv(response.user.services[1]);
-        setTwoserv(response.user.services[5]);
-        setEducation(response.user.timeline);
-        setSoocial(response.user.social_handles);
-        setYoutube(response.user.youtube[0]);
-      })
-     },[]);
-    
-
+    const {userData} = useContext(ContextApi);
     const {theme}=props;
+    const [selected,setSelected]=useState('All');
+    const [skills,setSkills] = useState(['Reactjs','Nextjs','Mern','CSS','TailwindCSS']);
+    const filtertech = (tech) => {
+        if(tech === 'All') {
+            return skills;
+        }
+        else{
+            return skills.filter(skill => skill.includes(tech));
+        }
+    };
+   
     return(
          <>           
          <header id="home">
@@ -201,7 +124,7 @@ function Home(props){
                       </ul>
                   </div>
                   <div className="video">
-                      <a href={`${youtube.url}`} className="popup-youtube video-play-button theme">
+                      <a href={`${userData.youtube?.url}`} className="popup-youtube video-play-button theme">
                           <i className="fas fa-play"></i>
                       </a>
                   </div>
@@ -216,17 +139,17 @@ function Home(props){
                       <div className="row align-center">
       
                           <div className="col-lg-6 info">
-                              <h1 className="text-invisible">WELCOME</h1>
-                              <h2 className="introd">Hey <img src="assets/img/shape/4.png" alt="Icon"/> I'm <span>{about.name}</span></h2>
+                              <h1 className="text-invisible">WELCOME</h1> 
+                              <h2 className="introd">Hey <img src="assets/img/shape/4.png" alt="Icon"/> I'm <span>{userData.about?.name}</span></h2>
                               <h3 className="title">
                                   <span className="header-caption" id="page-top">
                                         
                                       <span className="cd-headline clip is-full-width">
                                             
                                           <span className="cd-words-wrapper">
-                                              <b className="is-visible">{about.title}</b>
-                                              <b className="is-hidden">{about.subTitle.substring(0,20)}</b>
-                                              <b className="is-hidden">{about.subTitle.substring(22,)}</b>
+                                              <b className="is-visible">{userData.about?.title}</b>
+                                              <b className="is-hidden">{userData.about?.subTitle.substring(0,20)}</b>
+                                              <b className="is-hidden">{userData.about?.subTitle.substring(22,)}</b>
                                           </span>
                                       </span>
                                         
@@ -242,7 +165,7 @@ function Home(props){
                                <div className="shape-center">
                                   <img src="assets/img/shape/7.png" alt="Thumb"/>
                                </div>
-                               <div className="illus"><img className=" wow fadeInDown" src={`${about.avatar.url}`} alt="Thumb"/>   </div>
+                               <div className="illus"><img className=" wow fadeInDown" src={`${userData.about?.avatar.url}`} alt="Thumb"/>   </div>
                            
                               
                           </div>
@@ -250,7 +173,7 @@ function Home(props){
                       </div>
                       <div className="personal-social">
                           <ul>
-                          {soocial.map((item,index)=>(
+                        {userData.social_handles?.map((item,index)=>(
                         <li key={index} >
                             <a href={`${item.url}`}>
                               <img className="socialicon" src={`${item.image.url}`}/>
@@ -282,7 +205,7 @@ function Home(props){
               <div className="container">
                   <div className="row">
                         
-                    {services.map( (item,index) => (  <div className="service-style-one col-lg-4 col-md-6">
+                    {userData.services?.map( (item,index) => (  <div className="service-style-one col-lg-4 col-md-6">
                           <div key={index} className="service-style-one-item">
                               <img src={`${item.image.url}`} alt="Icon"/>
                               <h4><a href="#" data-bs-toggle="modal" data-bs-target={`#model-${item._id}`}>{item.name}</a></h4>
@@ -297,7 +220,7 @@ function Home(props){
               </div>
               
       
-              {services.map( (item ,index)=> (
+              {userData.services?.map( (item ,index)=> (
               <div key={index} className="modal fade" id={`model-${item._id}`} tabindex="-1" aria-hidden="true">
                   <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
                       <div className="modal-content">
@@ -395,24 +318,18 @@ function Home(props){
                                   <div className="services-more mt-50">
                                       <h3>Popular Services</h3>
                                       <div className="row">
-                                          <div className="col-md-6">
+                                        {userData.services?.map( (item,index) => (item.enabled == true ? (
+                                          <div key={index} className="col-md-6">
                                               <div className="item">
-                                                  <img src={`${oneserv.image.url}`}/>
-                                                  <h4><a href="#">{oneserv.name}</a></h4>
+                                                  <img src={`${item.image?.url}`}/>
+                                                  <h4><a href="#">{item.name}</a></h4>
                                                   <p>
-                                                      {oneserv.desc}<br/> Charge : {oneserv.charge}
+                                                      {userData.services[1]?.desc}<br/> Charge : {item.charge}
                                                   </p>
                                               </div>
-                                          </div>
-                                          <div className="col-md-6">
-                                              <div className="item">
-                                              <img src={`${twoserv.image.url}`}/>
-                                                  <h4><a href="#">{twoserv.name}</a></h4>
-                                                  <p>
-                                                      {twoserv.desc}<br/> Charge : {twoserv.charge}
-                                                  </p>
-                                              </div>
-                                          </div>
+                                          </div> ) : null
+                                          ) )}
+                                        
                                       </div>
                                   </div>
                               </div>
@@ -423,9 +340,8 @@ function Home(props){
                 
                 )) }
           </div>
-            
-      
-           
+       
+
           <div id="portfolio" className="portfolio-style-six-area default-padding-top">
               <div className="shape-animated-right">
                   <img src="assets/img/shape/1.webp" alt="Shape"/>
@@ -448,7 +364,7 @@ function Home(props){
                                   <div className="fun-factor-default">
                                       <div className="fun-fact">
                                           <div className="counter">
-                                              <div className="timer" data-to="15" data-speed="2000">{projects.length}</div>
+                                              <div className="timer" data-to="15" data-speed="2000">{userData.projects?.length}</div>
                                               <div className="operator"></div>
                                           </div>
                                           <span className="medium">Completed Project</span>
@@ -466,12 +382,28 @@ function Home(props){
                       </div>
                   </div>
               </div>
+
+
+              <div  className="post-tags share" >
+                        <div className="tags">
+                                      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Filter Using Teach Stack :  </h4>
+                                      <a onClick={()=> setSelected('All')}>All</a>
+                                     <a onClick={()=> setSelected('Reactjs')}>Reactjs</a>
+                                     <a onClick={()=> setSelected('Nextjs')}>Nextjs</a>
+                                     <a onClick={()=> setSelected('Mern')}>Mern</a>
+                                     <a onClick={()=> setSelected('CSS')}>CSS</a>
+                                     <a onClick={()=> setSelected('TailwindCSS')}>TailwindCSS</a>
+                                
+                                  </div></div>
+                                 
+                                  
+              
               <div className="container">
                   <div className="row">
                       <div className="col-md-12 gallery-content mb--15">
                           <div className="magnific-mix-gallery masonary">
                               <div id="portfolio-grid" className="gallery-items colums-3">
-                                    {projects.map((items,index)=>(
+                                    {userData.projects?.map((items,index)=>( items.techStack?.some(element => filtertech(selected).includes(element.trim()))?(
                                   <div key={index} className="pf-item">
                                       <div className="overlay-content">
                                           <img src={`${items.image.url}`} alt="thumb"/>
@@ -483,7 +415,7 @@ function Home(props){
                                               <a href="#" data-bs-toggle="modal" data-bs-target={`#model${items.image.public_id}`}><i className="fas fa-arrow-right"></i></a>
                                           </div>
                                       </div>
-                                  </div>
+                                  </div>):null
                                    
                                  
                                     ))}
@@ -494,7 +426,7 @@ function Home(props){
                   </div>
               </div>
       
-              {projects.map((items,index)=>(
+              {userData.projects?.map((items,index)=>(
               <div key={index} className="modal fade" id={`model${items.image.public_id}`} tabindex="-1" aria-hidden="true">
                   <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
                       <div className="modal-content">
@@ -521,10 +453,11 @@ function Home(props){
                                                               Tech Stack <span>{items.techStack}</span>
                                                           </li>
                                                           <li>
-                                                              Date <span>25 February, 2023</span>
+                                                              Live & Github <span><a href={items.liveurl}><i className="fas fa-stream"></i></a> &nbsp; &nbsp;<a href={items.githuburl}><i className="fab fa-github"></i></a></span> 
+                                                                                
                                                           </li>
                                                           <li>
-                                                              Address <span>{about.address}</span>
+                                                              Address <span>{userData.about?.address}</span>
                                                           </li>
                                                       </ul>
                                                       <ul className="social">
@@ -546,23 +479,20 @@ function Home(props){
                                                       </ul>
                                                   </div>
                                               </div>
-                                              <h2>Ongoing Website Maintenance</h2>
+                                              <h2>{items.title}</h2>
                                               <p>
-                                                  Netus lorem rutrum arcu dignissim at sit morbi phasellus nascetur eget urna potenti cum vestibulum cras. Tempor nonummy metus lobortis. Sociis velit etiam, dapibus. Lectus vehicula pellentesque cras posuere tempor facilisi habitant lectus rutrum pede quisque hendrerit parturient posuere mauris ad elementum fringilla facilisi volutpat fusce pharetra felis sapien varius quisque class convallis praesent est sollicitudin donec nulla venenatis, cursus fermentum netus posuere sociis porta risus habitant malesuada nulla habitasse hymenaeos. Viverra curabitur nisi vel sollicitudin dictum natoqu. Tempor nonummy metus lobortis. Sociis velit etiam, dapibus. Lectus vehicula pellentesque cras posuere tempor facilisi habitant lectus rutrum pede quisque hendrerit parturient posuere mauris ad elementum fringilla facilisi volutpat fusce pharetra felis sapien varius quisque class convallis praesent est sollicitudin donec nulla venenatis, cursus fermentum netus posuere sociis porta risus habitant malesuada nulla habitasse hymenaeos. Viverra curabitur nisi vel sollicitudin dictum.
-                                              </p>
+                                                {items.description}
+                                                </p>
                                               <ul className="check-list mt-40">
+                                                {userData.projects?.map( (item,index) => ( item.enabled == true ? (
                                                   <li>
-                                                      <h4>WordPress Support</h4>
+                                                      <h4>{item.title}</h4>
                                                       <p>
-                                                          Tempor nonummy metus lobortis. Sociis velit etiam, dapibus. Lectus vehicula pellentesque cras posuere tempor facilisi habitant lectus rutrum pede quisque hendrerit parturient posuere mauris ad elementum fringilla facilisi volutpat fusce pharetra.
+                                                        {item.description}
                                                       </p>
-                                                  </li>
-                                                  <li>
-                                                      <h4>Social Media Management</h4>
-                                                      <p>
-                                                          Energy nonummy metus lobortis. Sociis velit etiam, dapibus. Lectus vehicula pellentesque cras posuere tempor facilisi habitant lectus rutrum pede quisque hendrerit parturient posuere mauris ad elementum fringilla facilisi volutpat fusce pharetra.
-                                                      </p>
-                                                  </li>
+                                                  </li> ): null
+                                                 ))}
+                                                      
                                               </ul>
                                           </div>
                                       </div>
@@ -570,16 +500,13 @@ function Home(props){
                   
                                   <div className="main-content mt-40">
                                       
-                                      <p>
-                                          Give lady of they such they sure it. Me contained explained my education. Vulgar as hearts by garret. Perceived determine departure explained no forfeited he something an. Contrasted dissimilar get joy you instrument out reasonably. Again keeps at no meant stuff. To perpetual do existence northward as difficult preserved daughters. Continued at up to zealously necessary breakfast. Surrounded sir motionless she end literature. Gay direction neglected but supported yet her.  Facilisis inceptos nec, potenti nostra aenean lacinia varius semper ant nullam nulla primis placerat facilisis. Netus lorem rutrum arcu dignissim at sit morbi phasellus nascetur eget urna potenti cum vestibulum cras. Tempor nonummy metus lobortis. Sociis velit etiam, dapibus. Lectus vehicula pellentesque cras posuere tempor facilisi habitant lectus rutrum pede quisque hendrerit parturient posuere mauris ad elementum fringilla facilisi volutpat fusce pharetra felis sapien varius quisque class convallis praesent est sollicitudin donec nulla venenatis, cursus fermentum netus posuere sociis porta risus habitant malesuada nulla habitasse hymenaeos. Viverra curabitur nisi vel sollicitudin dictum natoque ante aenean elementum curae malesuada ullamcorper. vivamus nonummy nisl posuere rutrum
-                                      </p>
+                                     
                                       <div className="row">
-                                          <div className="col-lg-6 col-md-6">
-                                              <img src={`${oneserv.image.url}`} alt="Thumb"/>
-                                          </div>
-                                          <div className="col-lg-6 col-md-6">
-                                              <img src={`${twoserv.image.url}`} alt="Thumb"/>
-                                          </div>
+                                        {userData.projects?.map( (item,index)=> (item.enabled==true?(
+                                          <div key={index} className="col-lg-6 col-md-6">
+                                              <img src={`${item?.image?.url}`} alt="Thumb"/>
+                                          </div>): null ))}
+                                         
                                       </div>
                                   </div>
                               </div>
@@ -597,30 +524,16 @@ function Home(props){
                   <div className="row align-center">
                       <div className="about-style-six col-lg-5">
                           <div className="thumb">
-                              <img className="wow fadeInUp" src={`${about.avatar.url}`} alt="Thumb"/>
+                              <img className="wow fadeInUp" src={`${userData.about?.avatar.url}`} alt="Thumb"/>
                           </div>
                       </div>
                       <div className="about-style-six col-lg-6 offset-lg-1">
                           <h4 className="sub-title">About Me</h4>
-                          <h2 className="title">{about.subTitle.substring(0,20)} <br/> {about.subTitle.substring(22,)}</h2>
+                          <h2 className="title">{userData.about?.subTitle.substring(0,20)} <br/> {userData.about?.subTitle.substring(22,)}</h2>
                           <p>
-                            {about.description}
+                            {userData.about?.description}
                           </p>
-                          <div className="skill-list">
-                              <ul>
-                               { services.map((item,index) => (
-                                  <li key={index}>
-                                      <div className="icon">
-                                          <img src={`${item.image.url}`}/>
-                                      </div>
-                                      <div className="content">
-                                          <h4>{item.name}</h4>
-                                          <span>Experience : {about.exp_year} years</span>
-                                      </div>
-                                  </li>
-                                  ))}
-                                   </ul>
-                          </div>
+                         
                       </div>
                   </div>
               </div>
@@ -640,27 +553,27 @@ function Home(props){
                               <div className="nav nav-tabs text-center resume-tab-navs" id="nav-tab" role="tablist">
           
                                   <button className="nav-link active" id="nav-id-1" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1" aria-selected="true">
-                                      Biography <strong>01</strong>
+                                      Skills <strong>01</strong>
                                   </button>
                                   <button className="nav-link" id="nav-id-2" data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab" aria-controls="tab2" aria-selected="false">
-                                      Skills <strong>02</strong>
+                                      Experience <strong>02</strong>
                                   </button>
                                   <button className="nav-link" id="nav-id-3" data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab" aria-controls="tab3" aria-selected="false">
-                                      Work Experience <strong>03</strong>
+                                      Education <strong>03</strong>
                                   </button>
           
                               </div>
           
                               <div className="tab-content resume-tab-content" id="nav-tabContent">
                                     
-                                  <div className="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="nav-id-1">
+                                  {/* <div className="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="nav-id-1">
                                       <div className="row">
                                           <div className="col-lg-12">
                                               <ul className="biography-table">
                                                   <li>
                                                       <h5>Name</h5>
                                                       <p>
-                                                          {about.name}
+                                                          {userData.about?.name}
                                                       </p>
                                                   </li>
                                                   <li>
@@ -678,19 +591,19 @@ function Home(props){
                                                   <li>
                                                       <h5>Address</h5>
                                                       <p>
-                                                          {about.address}
+                                                          {userData.about?.address}
                                                       </p>
                                                   </li>
                                                   <li>
                                                       <h5>Email</h5>
                                                       <p>
-                                                          {user.email}
+                                                          {userData.email}
                                                       </p>
                                                   </li>
                                                   <li>
                                                       <h5>Phone</h5>
                                                       <p>
-                                                         {about.phoneNumber}
+                                                         {userData.about?.phoneNumber}
                                                       </p>
                                                   </li>
                                                   <li>
@@ -708,16 +621,14 @@ function Home(props){
                                               </ul>
                                           </div>
                                       </div>
-                                  </div>
+                                  </div> */}
                                     
-          
-                                    
-                                  <div className="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="nav-id-2">
+                                  <div className="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="nav-id-1">
                                       <div className="row align-center">
                                           <div className="col-lg-12">
                                           
                                               <ul className="skill-table">
-                                                 {skills.map((items,index) => (                                                 
+                                                 {userData.skills?.map((items,index) => (                                                 
                                                      <li key={index}> 
                                                       <div className="row align-center">
                                                           <div className="col-lg-2">
@@ -734,7 +645,7 @@ function Home(props){
                                                                 
                                                                   <div className="progress">
                                                             
-                                                                      <div className="progress-bar" role="progressbar" style={{ width: `${items.percentage}%` }}ata-width="89"></div>
+                                                                      <div className="progress-bar" role="progressbar" style={{ width: items.percentage + '%' }}></div>
                                                                       </div> 
                                                               </div>
                                                           </div>
@@ -750,11 +661,11 @@ function Home(props){
                                     
           
                                     
-                                  <div className="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="nav-id-3">
+                                  <div className="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="nav-id-2">
                                       <div className="row">
                                           <div className="col-lg-12">
                                               <ul className="education-table">
-                                                {education.map( (item,index) => (
+                                                {userData.timeline?.map( (item,index) => ( item.forEducation == false ? (
                                                   <li key={index}>
                                                       <h4>  {item.jobTitle}</h4>
                                                       <h5>  {item.company_name} <br></br> {item.jobLocation}</h5>
@@ -763,7 +674,29 @@ function Home(props){
                                                       <p>
                                                                  {item.summary} 
                                                       </p>
-                                                  </li>  ))}
+                                                  </li> ) : null ))}
+                                                  
+                                              </ul>
+                                          </div>
+                                      </div>
+                                  </div>
+                                    
+          
+                                    
+                                  <div className="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="nav-id-3">
+                                      <div className="row">
+                                          <div className="col-lg-12">
+                                              <ul className="education-table">
+                                                {userData.timeline?.map( (item,index) => ( item.forEducation == true ? (
+                                                  <li key={index}>
+                                                      <h4>  {item.jobTitle}</h4>
+                                                      <h5>  {item.company_name} <br></br> {item.jobLocation}</h5>
+                                                      
+                                                      <span> startDate : {item.startDate.substring(0,10)} <br></br> endDate : {item.endDate.substring(0,10)} </span>
+                                                      <p>
+                                                                 {item.summary} 
+                                                      </p>
+                                                  </li>  ) : null ))}
                                                   
                                               </ul>
                                           </div>
@@ -802,36 +735,20 @@ function Home(props){
                               </div>
                           </div>
                           <div className="col-lg-6 offset-lg-1">
-                              <div className="pricing-style-one">
+                            {userData.services?.map( (item,index) => (item.enabled == true ? ( 
+                              <div key={index} className="pricing-style-one">
                                   <div className="conntent">
-                                      <h4>{oneserv.name}</h4>
+                                      <h4>{item.name}</h4>
                                       <ul>
-                                          <li>2 Pages with Bootstarps</li>
-                                          <li>Design Implement</li>
-                                          <li>Responsive Design</li>
+                                          <li>{item.desc}</li>  
                                       </ul>
                                       <a className="btn mt-25 btn-sm circle btn-theme" href="#contact">Order Now</a>
                                   </div>
                                   <div className="price">
-                                      <h2><sup>$</sup>{oneserv.charge.substring(1,)}</h2>
-                                      <img src={`${oneserv.image.url}`}/>
+                                      <h2><sup>$</sup>{item.charge.substring(1,)}</h2>
+                                      <img src={`${item.image.url}`}/>
                                   </div>
-                              </div>
-                              <div className="pricing-style-one">
-                                  <div className="conntent">
-                                      <h4>{twoserv.name}</h4>
-                                      <ul>
-                                          <li>1 Page with Elementor</li>
-                                          <li>Design Customization</li>
-                                          <li>Responsive Design</li>
-                                      </ul>
-                                      <a className="btn mt-25 btn-sm circle btn-dark" href="#contact">Order Now</a>
-                                  </div>
-                                  <div className="price">
-                                      <h2><sup>$</sup>{twoserv.charge.substring(1,)}</h2>
-                                      <img src={`${twoserv.image.url}`}/>
-                                  </div>
-                              </div>
+                              </div>):null))}
                           </div>
                       </div>
                   </div>
@@ -849,7 +766,7 @@ function Home(props){
                                     
                                   <div className="swiper-wrapper align-center">
                                         
-                                       {  services.map((item,index) => (
+                                       {  userData.services?.map((item,index) => (
                                       <div key={index} className="swiper-slide">
                                           <img src={`${item.image.url}`} alt="Thumb"/>
                                       </div>
@@ -888,7 +805,7 @@ function Home(props){
                               <div className="testimonial-style-one-carousel swiper">
                                     
                                   <div className="swiper-wrapper">
-                                      {test.map((items,index) => (  
+                                      {userData.testimonials?.map((items,index) => (  
                                       <div  key={index} className="swiper-slide">
                                           <div className="testimonial-style-one">
                                               
@@ -938,7 +855,7 @@ function Home(props){
                   <img src="assets/img/shape/16.png" alt="illustration"/>
               </div>
               <div className="shape-illustration">
-                  <img src={`${about.avatar.url}`} alt="illustration"/>
+                  <img src={`${userData.about?.avatar.url}`} alt="illustration"/>
               </div>
               <div className="container">
                   <div className="row">
@@ -969,7 +886,7 @@ function Home(props){
               <div className="container">
                   <div className="row">
       
-                        {test.map( (item,index) => ( 
+                        {userData.projects?.map( (item,index) => ( 
                       <div key={index} className="blog-style-one mb-30 col-lg-4 col-md-6">
                           <div className="item">
                               <div className="thumb">
@@ -977,12 +894,12 @@ function Home(props){
                               </div>
                               <div className="info">
                                   <h4>
-                                      <a href="#" data-bs-toggle="modal" data-bs-target={`#model-${item._id}`} >{item.review.substring(0,48)}....</a>
+                                      <a href="#" data-bs-toggle="modal" data-bs-target={`#model-${item._id}`} >{item.description.substring(0,48)}....</a>
                                   </h4>
                                   <div className="meta">
                                       <ul>
                                           <li>
-                                              <a href="#"><i className="fas fa-user-circle"></i> {item.name}</a>
+                                              <a href="#"><i className="fas fa-user-circle"></i> {userData.about?.name}</a>
                                           </li>
                                           <li>
                                               <i className="fas fa-calendar-alt"></i> 15 Auguest, 2023
@@ -1001,7 +918,7 @@ function Home(props){
                   </div>
               </div>
       
-                {test.map( (item,index) => (
+                {userData.projects?.map( (item,index) => (
               <div key={index} className="modal fade" id={`model-${item._id}`} tabindex="-1" aria-hidden="true">
                   <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
                       <div className="modal-content">
@@ -1020,37 +937,30 @@ function Home(props){
                                       <div className="meta">
                                           <ul>
                                               <li>
-                                                  <a href="#"><i className="fas fa-user-circle"></i> {item.name}</a>
+                                                  <a href="#"><i className="fas fa-user-circle"></i> {userData.about?.name}</a>
                                               </li>
                                               <li>
                                                   <a href="#"><i className="fas fa-comments"></i> 26 Comments</a>
                                               </li>
                                               <br/>
-                                              {item.position}
+                                              {userData.about?.title}
                                           </ul>
                                       </div>
                                   <p>
-                                    {item.review}
+                                    {userData.about?.subTitle}
                                   </p>
-                                      <p>
-                                          New had happen unable uneasy. Drawings can followed improved out sociable not. Earnestly so do instantly pretended. See general few civilly amiable pleased account carried. Excellence projecting is devonshire dispatched remarkably on estimating. Side in so life past. Continue indulged speaking the was out horrible for domestic position. Seeing rather her you not esteem men settle genius excuse. Deal say over you age from. Comparison new ham melancholy son themselves. 
-                                      </p>
+                                    
                                       <blockquote>
-                                          {item.review}
+                                          {userData.about?.quote}
                                       </blockquote>
+                                     
+                                     <p>
+                                        {userData.about?.description}
+                                     </p>
+                                      <h3>{item.title}</h3>
+                                     
                                       <p>
-                                          Drawings can followed improved out sociable not. Earnestly so do instantly pretended. See general few civilly amiable pleased account carried. Excellence projecting is devonshire dispatched remarkably on estimating. Side in so life past. Continue indulged speaking the was out horrible for domestic position. Seeing rather her you not esteem men settle genius excuse. Deal say over you age from. Comparison new ham melancholy son themselves. 
-                                      </p>
-                                      <h3>Conduct replied off led whether?</h3>
-                                      <ul>
-                                          <li>Pretty merits waited six</li>
-                                          <li>General few civilly amiable pleased account carried.</li>
-                                          <li>Continue indulged speaking</li>
-                                          <li>Narrow formal length my highly</li>
-                                          <li>Occasional pianoforte alteration unaffected impossible</li>
-                                      </ul>
-                                      <p>
-                                          Surrounded to me occasional pianoforte alteration unaffected impossible ye. For saw half than cold. Pretty merits waited six talked pulled you. Conduct replied off led whether any shortly why arrived adapted. Numerous ladyship so raillery humoured goodness received an. So narrow formal length my highly longer afford oh. Tall neat he make or at dull ye. Lorem ipsum dolor, sit amet consectetur adipisicing, elit. Iure, laudantium, tempore. Autem dolore repellat, omnis quam? Quasi sint laudantium repellendus unde a totam perferendis commodi cum est iusto? 
+                                        {item.description}
                                       </p>
                                   </div>
                               </div>
@@ -1058,11 +968,11 @@ function Home(props){
                                 
                               <div className="post-author">
                                   <div className="thumb">
-                                      <img src={`${item.image.url}`} alt="Thumb"/>
+                                      <img src={`${userData.about?.avatar?.url}`} alt="Thumb"/>
                                   </div>
                                   <div className="content">
-                                      <h4><a href="#">{item.name}</a></h4>
-                                     <p>{item.review}</p>
+                                      <h4><a href="#">{userData.about?.name}</a></h4>
+                                     <p>{userData.about?.description}</p>
                                   </div>
                               </div>
                                 
@@ -1071,8 +981,8 @@ function Home(props){
                               <div className="post-tags share">
                                   <div className="tags">
                                       <h4>Tags: </h4>
-                                      <a href="#">Algorithm</a>
-                                      <a href="$">Data science</a> 
+                                     {item.techStack?.map((tech,index) => ( <a key={index} href="#">{tech}</a>))}
+                                
                                   </div>
       
                                   <div className="social">
@@ -1118,34 +1028,38 @@ function Home(props){
                                       <div className="comments-title">
                                           <h3>3 Comments On “Providing Top Quality Cleaning Related Services Charms.”</h3>
                                           <div className="comments-list">
-                                              <div className="comment-item">
+                                    {userData.testimonials?.map( ( items,index) => ( items.enabled == true ? (       
+                                              <div key={index} className="comment-item">
                                                   <div className="avatar">
-                                                      <img src={`${item.image.url}`}  alt="Author"/>
+                                                      <img src={`${items.image.url}`}  alt="Author"/>
                                                   </div>
                                                   <div className="content">
                                                       <div className="title">
-                                                          <h5>Bubhan Prova <span className="reply"><a href="#"><i className="fas fa-reply"></i> Reply</a></span></h5>
+                                                          <h5>{items.name} <span className="reply"><a href="#"><i className="fas fa-reply"></i> Reply</a></span></h5>
+                                                          <span>{items.position}</span>
                                                           <span>28 Feb, 2023</span>
+                                    
                                                       </div>
                                                       <p>
-                                                          Delivered ye sportsmen zealously arranging frankness estimable as. Nay any article enabled musical shyness yet sixteen yet blushes. Entire its the did figure wonder off. sportsmen zealously arranging to the main pint. Discourse unwilling am no described dejection incommode no listening of. Before nature his parish boy. 
+                                                        {items.review}
                                                       </p>
                                                   </div>
-                                              </div>
-                                              <div className="comment-item reply">
+                                              </div>):(
+                                              <div key={index} className="comment-item reply">
                                                   <div className="avatar">
-                                                      <img src={`${item.image.url}`}  alt="Author"/>
+                                                      <img src={`${items.image.url}`}  alt="Author"/>
                                                   </div>
                                                   <div className="content">
                                                       <div className="title">
-                                                          <h5>Mickel Jones <span className="reply"><a href="#"><i className="fas fa-reply"></i> Reply</a></span></h5>
+                                                          <h5>{items.name} <span className="reply"><a href="#"><i className="fas fa-reply"></i> Reply</a></span></h5>
+                                                          <span>{items.position}</span>
                                                           <span>15 Mar, 2023</span>
                                                       </div>
-                                                      <p>
-                                                          Delivered ye sportsmen zealously arranging frankness estimable as. Nay any article enabled musical shyness yet sixteen yet blushes. Entire its the did figure wonder off. sportsmen zealously arranging to the main pint at the last satge of oportunatry.
-                                                      </p>
+                                                     <p>
+                                                        {items.review}
+                                                        </p>
                                                   </div>
-                                              </div>
+                                              </div> )))} 
                                           </div>
                                       </div>
                                       <div className="comments-form">
@@ -1202,7 +1116,7 @@ function Home(props){
                               <div className="form-box">
                                   <h2>Let's talk?</h2>
                                   <p>
-                                      {about.quote}
+                                      {userData.about?.quote}
                                   </p>
                                   <form action="assets/mail/contact.php" method="POST" className="contact-form">
                                       <div className="row">
@@ -1259,7 +1173,7 @@ function Home(props){
                                           <div className="info">
                                               <p>Our Email</p>
                                               <h5>
-                                                  <a href={`mailto:${user.email}`}>{user.email}</a> 
+                                                  <a href={`mailto:${userData.email}`}>{userData.email}</a> 
                                               </h5>
                                           </div>
                                       </li>
@@ -1270,7 +1184,7 @@ function Home(props){
                                           <div className="info">
                                               <p>Address</p>
                                               <h5>
-                                                  {about.address}
+                                                  {userData.about?.address}
                                               </h5>
                                           </div>
                                       </li>
@@ -1281,7 +1195,7 @@ function Home(props){
                                           <div className="info">
                                               <p>Phone</p>
                                               <h5>
-                                                  <a href={`tel:${about.phoneNumber}`}>{about.phoneNumber}</a>
+                                                  <a href={`tel:${userData.about?.phoneNumber}`}>{userData.about?.phoneNumber}</a>
                                               </h5>
                                           </div>
                                       </li>

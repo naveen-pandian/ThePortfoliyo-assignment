@@ -1,62 +1,20 @@
-import React,{useEffect,useState} from "react";
+import React,{useContext,useState} from "react";
 import Header from "./header";
 import Footer from "./footer";
 import { useLocation } from "react-router-dom";
+import { ContextApi } from "../Api/ContextApi";
 
 
 function ProjectSingle(){
 
-    const [aboutt,setaboutt]=useState(
-        {
-           "address": ""
-            
-    });
-
-    const [oneservv,setoneservv]=useState(
-        {
-            "name": "",
-            "charge": "",
-            "desc": "",
-            "enabled":"",
-            "_id": "",
-            "image": {
-                "public_id": "",
-                "url": ""
-            }
-        }
-    )
-
-
-    const [twoservv,setTwoservv]=useState(
-        {
-            "name": "",
-            "charge": "",
-            "desc": "",
-            "enabled":"",
-            "_id": "",
-            "image": {
-                "public_id": "",
-                "url": ""
-            }
-        }
-    )
+    const {userData} = useContext(ContextApi);
+  
 
     const location= useLocation();
     console.log(location);
     const gets =location.state?.items;
-    const [items,setItems]=useState(gets);
-    useEffect(()=>{
+    const [items]=useState(gets); 
 
-        fetch('https://portfolio-backend-30mp.onrender.com/api/v1/get/user/65b3a22c01d900e96c4219ae')
-        .then(response => response.json())
-        .then(response => { setoneservv(response.user.services[1]);
-          setTwoservv(response.user.services[5]);
-          setaboutt(response.user.about);
-      });
-             setItems(gets);
-    },[]
-    )
-    console.log(items);
     return(
         <>
         <Header></Header>
@@ -95,11 +53,12 @@ function ProjectSingle(){
                                         <li>
                                             Tech Stack<span>{items.techStack}</span>
                                         </li>
+                                           <li>
+                                          Live & Github <span><a href={items.liveurl}><i className="fas fa-stream"></i></a> &nbsp; &nbsp;<a href={items.githuburl}><i className="fab fa-github"></i></a></span> 
+                                                                                
+                                         </li>
                                         <li>
-                                            Date <span>25 February, 2023</span>
-                                        </li>
-                                        <li>
-                                            Address <span>{aboutt.address}</span>
+                                            Address <span>{userData?.about?.address}</span>
                                         </li>
                                     </ul>
                                     <ul   className="social">
@@ -121,40 +80,34 @@ function ProjectSingle(){
                                     </ul>
                                 </div>
                             </div>
-                            <h2>Ongoing Website Maintenance</h2>
-                            <p>
-                                Netus lorem rutrum arcu dignissim at sit morbi phasellus nascetur eget urna potenti cum vestibulum cras. Tempor nonummy metus lobortis. Sociis velit etiam, dapibus. Lectus vehicula pellentesque cras posuere tempor facilisi habitant lectus rutrum pede quisque hendrerit parturient posuere mauris ad elementum fringilla facilisi volutpat fusce pharetra felis sapien varius quisque class convallis praesent est sollicitudin donec nulla venenatis, cursus fermentum netus posuere sociis porta risus habitant malesuada nulla habitasse hymenaeos. Viverra curabitur nisi vel sollicitudin dictum natoqu. Tempor nonummy metus lobortis. Sociis velit etiam, dapibus. Lectus vehicula pellentesque cras posuere tempor facilisi habitant lectus rutrum pede quisque hendrerit parturient posuere mauris ad elementum fringilla facilisi volutpat fusce pharetra felis sapien varius quisque class convallis praesent est sollicitudin donec nulla venenatis, cursus fermentum netus posuere sociis porta risus habitant malesuada nulla habitasse hymenaeos. Viverra curabitur nisi vel sollicitudin dictum.
+                            <h2>{items.title}</h2>
+                           <p>
+                            {items.description}
                             </p>
-                            <ul   className="check-list mt-40">
-                                <li>
-                                    <h4>WordPress Support</h4>
-                                    <p>
-                                        Tempor nonummy metus lobortis. Sociis velit etiam, dapibus. Lectus vehicula pellentesque cras posuere tempor facilisi habitant lectus rutrum pede quisque hendrerit parturient posuere mauris ad elementum fringilla facilisi volutpat fusce pharetra.
-                                    </p>
-                                </li>
-                                <li>
-                                    <h4>Social Media Management</h4>
-                                    <p>
-                                        Energy nonummy metus lobortis. Sociis velit etiam, dapibus. Lectus vehicula pellentesque cras posuere tempor facilisi habitant lectus rutrum pede quisque hendrerit parturient posuere mauris ad elementum fringilla facilisi volutpat fusce pharetra.
-                                    </p>
-                                </li>
-                            </ul>
+                            <ul className="check-list mt-40">
+                                                {userData.projects?.map( (item,index) => ( item.enabled == true ? (
+                                                  <li>
+                                                      <h4>{item.title}</h4>
+                                                      <p>
+                                                        {item.description}
+                                                      </p>
+                                                  </li> ): null
+                                                 ))}
+                                                      
+                                              </ul>
                         </div>
                     </div>
                 </div>
 
-                <div   className="main-content mt-40">
-                    
-                    <p>
-                        Give lady of they such they sure it. Me contained explained my education. Vulgar as hearts by garret. Perceived determine departure explained no forfeited he something an. Contrasted dissimilar get joy you instrument out reasonably. Again keeps at no meant stuff. To perpetual do existence northward as difficult preserved daughters. Continued at up to zealously necessary breakfast. Surrounded sir motionless she end literature. Gay direction neglected but supported yet her.  Facilisis inceptos nec, potenti nostra aenean lacinia varius semper ant nullam nulla primis placerat facilisis. Netus lorem rutrum arcu dignissim at sit morbi phasellus nascetur eget urna potenti cum vestibulum cras. Tempor nonummy metus lobortis. Sociis velit etiam, dapibus. Lectus vehicula pellentesque cras posuere tempor facilisi habitant lectus rutrum pede quisque hendrerit parturient posuere mauris ad elementum fringilla facilisi volutpat fusce pharetra felis sapien varius quisque class convallis praesent est sollicitudin donec nulla venenatis, cursus fermentum netus posuere sociis porta risus habitant malesuada nulla habitasse hymenaeos. Viverra curabitur nisi vel sollicitudin dictum natoque ante aenean elementum curae malesuada ullamcorper. vivamus nonummy nisl posuere rutrum
-                    </p>
-                    <div   className="row">
-                        <div   className="col-lg-6 col-md-6">
-                            <img src={`${oneservv.image.url}`} alt="Thumb"/>
-                        </div>
-                        <div   className="col-lg-6 col-md-6">
-                        <img src={`${twoservv.image.url}`} alt="Thumb"/>
-                        </div>
+                <div className="main-content mt-40">
+                                      
+                                     
+                                      <div className="row">
+                                        {userData.projects?.map( (item,index)=> (item.enabled==true?(
+                                          <div key={index} className="col-lg-6 col-md-6">
+                                              <img src={`${item?.image?.url}`} alt="Thumb"/>
+                                          </div>): null ))}
+                       
                     </div>
                 </div>
             </div>
