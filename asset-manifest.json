@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/ThePortfoliyo-assignment/static/css/main.31d6cfe0.css",
-    "main.js": "/ThePortfoliyo-assignment/static/js/main.85597eec.js",
+    "main.js": "/ThePortfoliyo-assignment/static/js/main.ce1d2e9b.js",
     "static/js/453.537cf5cc.chunk.js": "/ThePortfoliyo-assignment/static/js/453.537cf5cc.chunk.js",
     "index.html": "/ThePortfoliyo-assignment/index.html",
-    "main.85597eec.js.map": "/ThePortfoliyo-assignment/static/js/main.85597eec.js.map",
+    "main.ce1d2e9b.js.map": "/ThePortfoliyo-assignment/static/js/main.ce1d2e9b.js.map",
     "453.537cf5cc.chunk.js.map": "/ThePortfoliyo-assignment/static/js/453.537cf5cc.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.31d6cfe0.css",
-    "static/js/main.85597eec.js"
+    "static/js/main.ce1d2e9b.js"
   ]
 }
